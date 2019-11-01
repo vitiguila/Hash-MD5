@@ -1,0 +1,12 @@
+package hashs;
+
+public class MD5 {
+	public static void main(String[] args) throws Exception {
+		Usuario.definir_credenciais("Boob", "boba");
+		Usuario.definir_credenciais("Alice", "foda");
+		Usuario.definir_credenciais("Juninho", "pato");
+		Usuario.definir_credenciais("Banana", "bola");
+		Usuario.gravar();
+		Usuario.autenticar("Alice", "foda");
+	}
+}
