@@ -1,0 +1,75 @@
+package hashs;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
+
+public class Usuario {
+	static String usuario;
+	static String senha;
+	public static String senha_hash;
+	static ArrayList<String> lista_de_usuario = new ArrayList<String>();
+	
+	public static void definir_credenciais(String usuario, String senha)throws Exception {
+		Usuario.usuario = usuario;
+		Usuario.senha = senha;
+		String s = senha;
+	    MessageDigest m = MessageDigest.getInstance("MD5");
+	    m.update(s.getBytes(),0,s.length());
+	    senha_hash = new BigInteger(1,m.digest()).toString(16);
+	    System.out.println("Usuario: " + usuario );
+	   	System.out.println("Senha: " + senha_hash );
+	   	System.out.println();
+	   	lista_de_usuario.add(usuario + ":" + senha_hash);
+	}
+	   	
+	 public static void gravar () {
+		try {
+			FileWriter gravar = new FileWriter(new File("CAMINHO DO ARQUIVO TXT PARA ARMAZENAR SENHA E USUARIO"));  
+			PrintWriter saida = new PrintWriter(gravar);
+			for (String s: lista_de_usuario)
+				saida.println(s);
+			saida.close();  
+			gravar.close();
+			System.out.println("Senhas e usuarios salvas com sucesso!");
+			System.out.println();
+		} catch (Exception e) {
+		e.printStackTrace();
+		}
+
+	 }
+	 public static void autenticar(String usuario, String senha) throws Exception {
+		 Usuario.usuario = usuario;
+		 Usuario.senha = senha;
+		 String s = senha;
+		 MessageDigest m = MessageDigest.getInstance("MD5");
+	     m.update(s.getBytes(),0,s.length());
+	     senha_hash = new BigInteger(1,m.digest()).toString(16);
+	     lista_de_usuario.add(usuario + ":" + senha_hash);
+	     FileReader arquivo = new FileReader ("CAMINHO DO ARQUIVO TXT PARA AUTENTICAR");
+	     BufferedReader larq = new BufferedReader (arquivo);
+	     
+	     String leitura = null;
+	     
+	     while( (leitura=larq.readLine()) != null )
+	     {
+	    	String lista_dividida [] = leitura.split(":");
+	     	if (lista_dividida[0].equals(usuario))
+	     		if (lista_dividida[1].equals(senha_hash))
+	     			System.out.println("Usuario Autenticado com Sucesso");
+	     		else
+	     			System.out.println("Não foi possivel Autenticar o usuario");
+	     			
+	     	}
+	     larq.close();
+	     }
+
+	 }
+	 
+
